@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity,Image } from 'react-native'
 import React, { } from 'react'
+import { image185 } from '../api/moviedb';
 
 
 export default function Cast({ navigation,cast}) {
@@ -25,14 +26,15 @@ export default function Cast({ navigation,cast}) {
                         > 
                           
                         <Image
-                            source={require('../assets/images/poster_1.jpeg')}
+                            // source={require('../assets/images/poster_1.jpeg')}
+                            source={{ uri: image185(person.profile_path) }}
                             style={{ width: 100, height: 100, borderRadius: 50, borderWidth: 2, borderColor: 'white' }}
                         />
                             <Text style={{ color: 'white', marginTop: 5, fontSize: 15 }}>
-                                {characterName.length > 10 ? characterName.slice(0, 10) + '...' : characterName}
+                                {person?.character.length > 10 ? person?.character.slice(0, 10) + '...' : person?.character}
                             </Text>
-                            <Text style={{ color: 'white', marginTop: 5, fontSize: 15 }}>
-                                {personName.length > 10 ? personName.slice(0, 10) + '...' : personName}
+                            <Text style={{ color: '#8B9474', marginTop: 5, fontSize: 15 }}>
+                                {person?.original_name.length > 10 ? person?.original_name.slice(0, 10) + '...' : person?.original_name}
                             </Text>
                         </TouchableOpacity>
                     );

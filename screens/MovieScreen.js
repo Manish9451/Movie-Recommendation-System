@@ -8,6 +8,7 @@ import { LinearGradient } from 'react-native-linear-gradient';
 import Cast from '../components/cast';
 import MovieList from '../components/movieList';
 import Loading from '../components/loading';
+import { fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
 
 
 
@@ -20,16 +21,56 @@ export default function MovieScreen() {
     const { params: item } = useRoute();
     const [isFavorite, toggleFavorite] = useState(false);
     const navigation = useNavigation();
-    const [cast, setCast] = useState([1, 2, 3]);
-    const [similarMovies, setSimilarMovies] = useState([1, 2, 3]);
+    const [cast, setCast] = useState([]);
+    const [similarMovies, setSimilarMovies] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [movie , setMovie] = useState({});
     let movieName = 'BRAVE';
 
     useEffect(() => {
 
         //call the Api
-        console.log(item);
+        // console.log('itemid', item.id);
+        setLoading(true);
+        getMovieDetails(item.id);
+        getMovieCredits(item.id);
+        getSimilarMovies(item.id);
     }, [item]);
+
+    const getMovieDetails = async id=> {
+
+        const data = await fetchMovieDetails(id);
+        // console.log('got movie details', data);
+        if(data){
+            setMovie(data);
+        }
+        setLoading(false);
+
+    }
+
+    const getMovieCredits = async id=> {
+
+        const data = await fetchMovieCredits(id);
+        console.log('got movie credit', data);
+        if(data && data.cast){
+            setCast(data.cast);
+        }
+       
+
+    }
+
+    
+    const getSimilarMovies = async id=> {
+
+        const data = await fetchSimilarMovies(id);
+        // console.log('got movie similar', data);
+        if(data && data.results){
+            setSimilarMovies(data.results);
+        }
+       
+
+    }
+
 
     return (
         <ScrollView
@@ -56,7 +97,8 @@ export default function MovieScreen() {
                     ) : (
                         <View>
                             <Image
-                                source={require('../assets/images/poster_1.jpeg')}
+                                // source={require('../assets/images/poster_1.jpeg')}
+                                source={{ uri: image500(movie.poster_path) }}
                                 style={{ width, height: height * 0.55 }}
                             />
 
@@ -84,17 +126,33 @@ export default function MovieScreen() {
                 <Text className="text-white text-3xl font-bold text-center tracking-wider">
 
                     {
-                        movieName
+                        movie?.title
                     }
                 </Text>
+                {
+                    movie?.id?(
+                        <Text className="text-neutral-400 font-semibold text-base text-center">
+                        {movie?.status} . {movie?.release_date?.split('-')[0]} . {movie?.runtime} min
+                      </Text>
 
-                <Text className="text-neutral-400 font-semibold text-base text-center">
-                    Released: 2012 . 170 min
-                </Text>
+                    ):null
+                }
+               
 
                 <View className="flex-row justify-center mx-4 space-x-2">
 
-                    <Text className="text-neutral-400 font-semibold text-base text-center">
+                    {
+                        movie?.genres?.map((genre, index) => {
+                            let showDot =index+1 != movie.genres.length;
+                            return (
+                                <Text key={index} className="text-neutral-400 font-semibold text-base text-center">
+                                    {genre?.name} {showDot?'.':null}
+                                </Text>
+                            );
+                        })
+                    }
+
+                    {/* <Text className="text-neutral-400 font-semibold text-base text-center">
                         Action .
                     </Text>
                     <Text className="text-neutral-400 font-semibold text-base text-center">
@@ -102,10 +160,14 @@ export default function MovieScreen() {
                     </Text>
                     <Text className="text-neutral-400 font-semibold text-base text-center">
                         Comedy .
-                    </Text>
+                    </Text> */}
                 </View>
                 <Text className="text-neutral-500 mx-4 tracking-wide">
-                    Brave is a 2012 American animated fantasy film produced by Pixar Animation Studios and released by Walt Disney Pictures. The film was directed by Mark Andrews and Brenda Chapman (in the former's feature directorial debut), co-directed by Steve Purcell, and produced by Katherine Sarafian, with John Lasseter,
+
+                    {
+                        movie?.overview
+                    }
+                    {/* Brave is a 2012 American animated fantasy film produced by Pixar Animation Studios and released by Walt Disney Pictures. The film was directed by Mark Andrews and Brenda Chapman (in the former's feature directorial debut), co-directed by Steve Purcell, and produced by Katherine Sarafian, with John Lasseter, */}
 
                 </Text>
             </View>

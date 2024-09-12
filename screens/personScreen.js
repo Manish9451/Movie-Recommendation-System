@@ -1,9 +1,9 @@
 import { Text, View, Dimensions, Platform, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import MovieList from '../components/movieList';
 import Loading from '../components/loading';
 
@@ -12,10 +12,18 @@ const ios = Platform.OS == 'ios';
 verticalMargin = ios ? '' : 'my-3';
 
 export default function PersonScreen() {
+    const {paramas: item} = useRoute();
     const navigation = useNavigation();
     const [isFavorite, toggleFavorite] = useState(false);
-    const [personMovies, setPersonMovies] = useState([1, 2, 3]);
+    const [personMovies, setPersonMovies] = useState([1]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        console.log('person:', item);
+
+
+    },[item]);
 
     return (
         <ScrollView className="flex-1 bg-neutral-900 " contentContainerStyle={{ paddingBottom: 20 }}>
@@ -80,7 +88,7 @@ export default function PersonScreen() {
                             <Text className="text-neutral-400 tracking-wide">Keanu Charles Reeves is a Canadian actor. Born in Beirut and raised in Toronto, Reeves began acting in theatre productions and in television films before making his feature film debut in Youngblood.</Text>
                         </View>
 
-                        <MovieList title={'Movies'} hideSeeAll={true} data={personMovies} />
+                        {/* <MovieList title={'Movies'} hideSeeAll={true} data={personMovies} /> */}
 
                     </View>
 

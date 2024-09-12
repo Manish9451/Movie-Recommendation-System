@@ -2,6 +2,7 @@ import { View,Text,StyleSheet, TouchableWithoutFeedback,Image,Dimensions} from '
 import React,{} from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { useNavigation } from '@react-navigation/native';
+import { image500 } from './../api/moviedb';
 
 var {width, height} = Dimensions.get('window');
 
@@ -36,10 +37,13 @@ export default function TreandingMovies({data}) {
 }
 
 const MovieCard = ({item, handleClick}) => {
+  console.log('itemposterpath',item.poster_path)
   return (
     <TouchableWithoutFeedback  onPress={()=> handleClick(item)}>
        
-      <Image source={require('../assets/images/poster_1.jpeg')}
+      <Image 
+      // source={require('../assets/images/poster_1.jpeg')}
+      source={{uri: image500(item.poster_path)}}
         
         style={{ 
           width: width*0.6,

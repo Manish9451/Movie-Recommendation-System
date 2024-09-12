@@ -1,6 +1,7 @@
 import React, { } from "react";
 import { View, Text, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Dimensions, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { image185 } from './../api/moviedb';
 var { width, height } = Dimensions.get('window');
 
 export default function MovieList({ title, data,hideSeeAll }) {
@@ -35,7 +36,7 @@ export default function MovieList({ title, data,hideSeeAll }) {
                         >
                             <View style={{ marginRight: 4 }}>
                                 <Image
-                                    source={require('../assets/images/poster_2.jpeg')}
+                                    source={{ uri: image185(item.poster_path) }}
                                     style={{
                                         width: width * 0.30, height: height * 0.22,
                                         borderRadius: 20, // Add border radius
@@ -46,7 +47,7 @@ export default function MovieList({ title, data,hideSeeAll }) {
 
                                 <Text style={{ color: '#ccc', marginLeft: 1 }}>
                                     {
-                                        movieName.length > 15 ? movieName.substring(0, 14) + '...' : movieName
+                                        item.title.length > 10 ? item.title.substring(0, 10) + '...' : item.title
                                     }
                                 </Text>
                             </View>
