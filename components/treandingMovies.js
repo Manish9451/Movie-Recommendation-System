@@ -37,7 +37,7 @@ export default function TreandingMovies({data}) {
 }
 
 const MovieCard = ({item, handleClick}) => {
-  console.log('itemposterpath',item.poster_path)
+  // console.log('itemposterpath',item.poster_path)
   return (
     <TouchableWithoutFeedback  onPress={()=> handleClick(item)}>
        
